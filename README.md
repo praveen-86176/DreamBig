@@ -68,4 +68,4 @@ The frontend will start at `http://localhost:5173`.
 - **Backend**: Ready for Render/Fly.io. Ensure environment variables are set in the dashboard.
 
 ---
-Built with ❤️ by Antigravity
+Built with ❤️ by Praveen Kumar
