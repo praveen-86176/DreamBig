@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #10b981; /* Emerald 500 */
+  --color-brand-dark: #000000;
+  
+  --font-sans: 'Inter', 'system-ui', 'sans-serif';
+  
+  --animate-slide-up: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-fade-in: fadeIn 0.5s ease-out;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-reverse: spinReverse 1s linear infinite;
+
+  @keyframes slideUp {
+    0% { transform: translateY(30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes spinReverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
+}
+
+/* 
+  Dynamic Theme Variables (Refined)
+*/
+:root {
+  /* Light Mode */
+  --bg-page: #f0fdf4; /* Very subtle green tint white */
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --border-light: #e2e8f0;
+  
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  
+  --shadow-card: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+}
+
+.dark {
+  /* Dark Mode */
+  --bg-page: #000000;
+  --bg-card: #09090b; /* zinc-950 */
+  --bg-card-hover: #18181b; /* zinc-900 */
+  --border-light: #27272a; /* zinc-800 */
+  
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa; /* zinc-400 */
+  
+  --shadow-card: 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+body {
+  @apply font-sans antialiased transition-colors duration-500 overflow-x-hidden;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+}
+
+/* Reusable UI Classes */
+.n-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  color: var(--text-main);
+  box-shadow: var(--shadow-card);
+  @apply rounded-3xl transition-all duration-300;
+}
+
+.n-card:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--color-brand-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.n-btn-ghost {
+  color: var(--text-muted);
+  @apply p-2 rounded-full transition-colors hover:text-brand-primary;
+}
+
+/* Helper for shiny bar effect */
+.sheen-effect {
+  mask-image: linear-gradient(-60deg, black 40%, transparent 50%, black 60%);
+  animation: sheen 2s infinite;
+}
+
+@keyframes sheen {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
