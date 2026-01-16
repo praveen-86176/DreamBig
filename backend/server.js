@@ -1,3 +1,26 @@
+/**
+ * NutriVeda Backend Server
+ * 
+ * AI-powered food analysis API using Google Gemini Vision
+ * 
+ * @author Praveen Kumar
+ * @version 1.0.0
+ * @description Express server providing food image analysis endpoints
+ * 
+ * Features:
+ * - Food image upload and analysis
+ * - AI-powered nutritional insights
+ * - Meal history tracking
+ * - Health warnings and dietary tags
+ * - Cooking method detection
+ * 
+ * Endpoints:
+ * - GET  /                      - API information
+ * - GET  /api/health           - Health check
+ * - POST /api/analyze          - Analyze food image
+ * - GET  /api/analyze/history  - Get meal history
+ */
+
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
