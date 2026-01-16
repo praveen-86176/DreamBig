@@ -50,8 +50,8 @@ const Auth = ({ onLogin }) => {
                         <button
                             onClick={() => setIsLogin(true)}
                             className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-300 ${isLogin
-                                    ? 'bg-[var(--bg-card)] text-brand-primary shadow-sm ring-1 ring-black/5 dark:ring-white/10'
-                                    : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
+                                ? 'bg-[var(--bg-card)] text-brand-primary shadow-sm ring-1 ring-black/5 dark:ring-white/10'
+                                : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                                 }`}
                         >
                             Sign In
@@ -59,8 +59,8 @@ const Auth = ({ onLogin }) => {
                         <button
                             onClick={() => setIsLogin(false)}
                             className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-300 ${!isLogin
-                                    ? 'bg-[var(--bg-card)] text-brand-primary shadow-sm ring-1 ring-black/5 dark:ring-white/10'
-                                    : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
+                                ? 'bg-[var(--bg-card)] text-brand-primary shadow-sm ring-1 ring-black/5 dark:ring-white/10'
+                                : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
                                 }`}
                         >
                             Sign Up
@@ -131,24 +131,6 @@ const Auth = ({ onLogin }) => {
                         </button>
                     </form>
 
-                    {/* Social / Divider */}
-                    <div className="mt-8 relative flex items-center justify-center">
-                        <div className="absolute inset-x-0 h-px bg-[var(--border-light)]"></div>
-                        <span className="relative bg-[var(--bg-card)] px-4 text-xs font-medium text-[var(--text-muted)] uppercase tracking-widest">
-                            Or continue with
-                        </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 mt-6">
-                        <button className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--bg-card-hover)] border border-[var(--border-light)] hover:border-[var(--text-muted)] transition-all font-bold text-[var(--text-main)] text-sm group">
-                            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                            Google
-                        </button>
-                        <button className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[var(--bg-card-hover)] border border-[var(--border-light)] hover:border-[var(--text-muted)] transition-all font-bold text-[var(--text-main)] text-sm group">
-                            <img src="https://www.svgrepo.com/show/475647/apple-color.svg" alt="Apple" className="w-5 h-5 group-hover:scale-110 transition-transform dark:invert" />
-                            Apple
-                        </button>
-                    </div>
                 </div>
 
                 <p className="text-center mt-8 text-sm text-[var(--text-muted)]">
