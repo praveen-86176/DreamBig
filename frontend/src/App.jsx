@@ -4,21 +4,23 @@ import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 
 function App() {
-  // Simple auth state management
-  // In a real app, you would check localStorage or a cookie here
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('isAuthenticated') === 'true';
+  // Enhanced auth state management
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('nutriveda_user');
+    return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    localStorage.setItem('isAuthenticated', 'true');
+  const handleLogin = (userData) => {
+    setUser(userData);
+    localStorage.setItem('nutriveda_user', JSON.stringify(userData));
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('isAuthenticated');
+    setUser(null);
+    localStorage.removeItem('nutriveda_user');
   };
+
+  const isAuthenticated = !!user;
 
   return (
     <Router>
@@ -37,7 +39,7 @@ function App() {
           path="/"
           element={
             isAuthenticated ? (
-              <Dashboard onLogout={handleLogout} />
+              <Dashboard user={user} onLogout={handleLogout} />
             ) : (
               <Navigate to="/auth" replace />
             )

@@ -26,28 +26,38 @@ const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// ===== MongoDB Connection =====
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('🍃 MongoDB Connected'))
+    .catch(err => console.error('❌ MongoDB Connection Error:', err));
+
+// ===== User Schema =====
+const userSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
+});
+
+const User = mongoose.model('User', userSchema);
+
 // ===== CORS =====
 const corsOptions = {
     origin: function (origin, callback) {
-        // Allow requests with no origin (mobile apps, Postman, etc.)
         if (!origin) return callback(null, true);
-
-        // Allow localhost for development
         if (origin.match(/^http:\/\/localhost:\d+$/)) {
             return callback(null, true);
         }
-
-        // Allow Render and Vercel deployments
         if (origin.match(/\.onrender\.com$/) || origin.match(/\.vercel\.app$/)) {
             return callback(null, true);
         }
-
         callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
@@ -57,6 +67,56 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// ===== Auth Routes =====
+app.post('/api/auth/signup', async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+
+        // Check if user exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: 'User already exists' });
+        }
+
+        // Create new user
+        const newUser = new User({ name, email, password });
+        await newUser.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'User created successfully',
+            user: { name: newUser.name, email: newUser.email }
+        });
+    } catch (error) {
+        console.error('Signup Error:', error);
+        res.status(500).json({ success: false, message: 'Server error during signup' });
+    }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Find user
+        const user = await User.findOne({ email });
+        if (!user || user.password !== password) {
+            return res.status(400).json({ success: false, message: 'Invalid credentials' });
+        }
+
+        res.json({
+            success: true,
+            message: 'Login successful',
+            user: { name: user.name, email: user.email }
+        });
+    } catch (error) {
+        console.error('Login Error:', error);
+        res.status(500).json({ success: false, message: 'Server error during login' });
+    }
+});
+
+// ===== Serve uploaded images =====
+
 
 // ===== Serve uploaded images =====
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
