@@ -1,0 +1,29 @@
+{
+    "name": "nutriveda-backend",
+    "version": "1.0.0",
+    "description": "NutriVeda AI Nutrition Assistant Backend",
+    "main": "backend/server.js",
+    "scripts": {
+        "start": "node backend/server.js",
+        "dev": "cd backend && node server.js"
+    },
+    "keywords": [
+        "nutrition",
+        "ai",
+        "food-analysis",
+        "gemini"
+    ],
+    "author": "Praveen Kumar",
+    "license": "MIT",
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "dependencies": {
+        "@google/generative-ai": "^0.24.1",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
+        "express": "^5.2.1",
+        "mongoose": "^9.1.3",
+        "multer": "^2.0.2"
+    }
+}

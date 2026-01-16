@@ -8,7 +8,29 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 // ===== CORS =====
-app.use(cors());
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, Postman, etc.)
+        if (!origin) return callback(null, true);
+
+        // Allow localhost for development
+        if (origin.match(/^http:\/\/localhost:\d+$/)) {
+            return callback(null, true);
+        }
+
+        // Allow Render and Vercel deployments
+        if (origin.match(/\.onrender\.com$/) || origin.match(/\.vercel\.app$/)) {
+            return callback(null, true);
+        }
+
+        callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // ===== Serve uploaded images =====

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: nutriveda-backend
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 5001
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+    healthCheckPath: /api/health
