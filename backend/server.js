@@ -11,6 +11,10 @@ const PORT = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
+// ===== Serve uploaded images =====
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // ===== Multer =====
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -118,9 +122,29 @@ app.post('/api/analyze', upload.single('image'), async (req, res) => {
         console.log(`📊 Category: ${analysis.category}`);
         console.log(`⭐ Score: ${analysis.score}/100`);
 
+        // Save image to uploads folder
+        const fs = require('fs');
+        const path = require('path');
+        const uploadsDir = path.join(__dirname, 'uploads');
+
+        // Create uploads directory if it doesn't exist
+        if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir, { recursive: true });
+        }
+
+        // Generate unique filename
+        const timestamp = Date.now();
+        const ext = req.file.mimetype.split('/')[1];
+        const filename = `food_${timestamp}.${ext}`;
+        const filepath = path.join(uploadsDir, filename);
+
+        // Save image
+        fs.writeFileSync(filepath, req.file.buffer);
+        const imageUrl = `/uploads/${filename}`;
+
         const meal = {
-            _id: Date.now().toString(),
-            imageUrl: "https://placehold.co/600x400",
+            _id: timestamp.toString(),
+            imageUrl: imageUrl,
             analysis,
             createdAt: new Date().toISOString()
         };

@@ -49,7 +49,7 @@ const Navbar = ({ toggleTheme, isDark, onOpenHistory }) => (
   </nav>
 );
 
-/* Drawer for History */
+/* Drawer for Activity */
 const HistoryDrawer = ({ isOpen, onClose, history, onSelect }) => {
   if (!isOpen) return null;
   return (
@@ -57,7 +57,7 @@ const HistoryDrawer = ({ isOpen, onClose, history, onSelect }) => {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={onClose}></div>
       <div className="relative w-full max-w-sm h-full bg-[var(--bg-page)] border-l border-[var(--border-light)] shadow-2xl p-4 overflow-y-auto animate-slide-up">
         <div className="flex items-center justify-between mb-6 sticky top-0 bg-[var(--bg-page)] py-2 z-20 border-b border-[var(--border-light)]">
-          <h2 className="text-xl font-bold text-[var(--text-main)]">Your History</h2>
+          <h2 className="text-xl font-bold text-[var(--text-main)]">Your Activity</h2>
           <button onClick={onClose} className="n-btn-ghost hover:rotate-90 transition-transform duration-300"><X className="w-5 h-5" /></button>
         </div>
 
@@ -69,26 +69,44 @@ const HistoryDrawer = ({ isOpen, onClose, history, onSelect }) => {
             <p className="text-sm">No meals scanned yet.</p>
           </div>
         ) : (
-          <div className="space-y-2 pb-8">
+          <div className="space-y-3 pb-8">
             {history.map((meal, idx) => (
               <div
                 key={meal._id}
                 onClick={() => { onSelect(meal); onClose(); }}
-                className="n-card p-3 flex items-center gap-3 cursor-pointer hover:border-brand-primary hover:scale-[1.01] active:scale-[0.99] animate-slide-up"
+                className="n-card p-0 overflow-hidden cursor-pointer hover:border-brand-primary hover:scale-[1.01] active:scale-[0.99] animate-slide-up"
                 style={{ animationDelay: `${idx * 0.05}s` }}
               >
-                <div className="w-10 h-10 bg-[var(--bg-card-hover)] rounded-lg flex items-center justify-center text-xl shadow-inner relative overflow-hidden">
-                  <span className="relative z-10">{meal.analysis.emoji || '🍽️'}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-[var(--text-main)] truncate text-sm">{meal.analysis.foodName}</h3>
-                  <p className="text-[10px] text-[var(--text-muted)] flex items-center gap-1">
-                    {new Date(meal.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <span className="block font-black text-brand-primary text-sm">{meal.analysis.calories}</span>
-                  <span className="text-[9px] text-[var(--text-muted)] uppercase font-bold tracking-wider">kcal</span>
+                {/* Food Image */}
+                {meal.imageUrl && (
+                  <div className="w-full h-32 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 relative overflow-hidden">
+                    <img
+                      src={`http://localhost:5001${meal.imageUrl}`}
+                      alt={meal.analysis.foodName}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center text-6xl">${meal.analysis.emoji || '🍽️'}</div>`;
+                      }}
+                    />
+                    <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-full">
+                      <span className="text-white text-xs font-bold">{meal.analysis.category || 'Food'}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Meal Info */}
+                <div className="p-3 flex items-center gap-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-[var(--text-main)] truncate text-sm">{meal.analysis.foodName}</h3>
+                    <p className="text-[10px] text-[var(--text-muted)] flex items-center gap-1">
+                      {new Date(meal.createdAt).toLocaleDateString()} • {new Date(meal.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <span className="block font-black text-brand-primary text-sm">{meal.analysis.calories}</span>
+                    <span className="text-[9px] text-[var(--text-muted)] uppercase font-bold tracking-wider">kcal</span>
+                  </div>
                 </div>
               </div>
             ))}
