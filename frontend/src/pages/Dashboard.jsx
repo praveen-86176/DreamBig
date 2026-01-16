@@ -645,12 +645,7 @@ const Dashboard = ({ user, onLogout }) => {
                                 <div className="space-y-4">
                                     {user?.name && (
                                         <h2 className="text-lg sm:text-xl font-medium text-[var(--text-muted)] animate-slide-up mb-2">
-                                            {(() => {
-                                                const hour = new Date().getHours();
-                                                if (hour < 12) return 'Good Morning';
-                                                if (hour < 18) return 'Good Afternoon';
-                                                return 'Good Evening';
-                                            })()}, <span className="text-brand-primary font-bold capitalize">{user.name}</span>! 👋
+                                            Welcome, <span className="text-brand-primary font-bold capitalize">{user.name}</span>! 👋
                                         </h2>
                                     )}
                                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/10 text-brand-primary text-xs font-bold uppercase tracking-wider animate-slide-up">
