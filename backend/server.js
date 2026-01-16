@@ -224,6 +224,29 @@ app.post('/api/analyze', upload.single('image'), async (req, res) => {
     }
 });
 
+// ===== Health Check & Root Route =====
+app.get('/', (req, res) => {
+    res.json({
+        success: true,
+        message: 'NutriVeda API is running',
+        version: '1.0.0',
+        endpoints: {
+            health: '/api/health',
+            analyze: 'POST /api/analyze',
+            history: 'GET /api/analyze/history'
+        }
+    });
+});
+
+app.get('/api/health', (req, res) => {
+    res.json({
+        success: true,
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
 // ===== Start =====
 app.listen(PORT, () => {
     console.log(`\n🚀 NutriVeda Server Running`);

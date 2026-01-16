@@ -8,6 +8,9 @@ import {
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
 
+/* --- Configuration --- */
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
 /* --- Visual Assets --- */
 
 const BackgroundBlobs = () => (
@@ -82,7 +85,7 @@ const HistoryDrawer = ({ isOpen, onClose, history, onSelect }) => {
                 {meal.imageUrl && (
                   <div className="w-full h-32 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 relative overflow-hidden">
                     <img
-                      src={`http://localhost:5001${meal.imageUrl}`}
+                      src={`${API_URL}${meal.imageUrl}`}
                       alt={meal.analysis.foodName}
                       className="w-full h-full object-cover"
                       onError={(e) => {
@@ -514,7 +517,7 @@ function App() {
 
   const fetchHistory = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/analyze/history');
+      const res = await fetch(`${API_URL}/api/analyze/history`);
       if (!res.ok) throw new Error("Connection failed");
       const json = await res.json();
       if (json.success) setHistoryData(json.data);
@@ -533,7 +536,7 @@ function App() {
     formData.append('image', file);
 
     try {
-      const res = await fetch('http://localhost:5001/api/analyze', { method: 'POST', body: formData });
+      const res = await fetch(`${API_URL}/api/analyze`, { method: 'POST', body: formData });
       if (!res.ok) throw new Error("Server error");
 
       const result = await res.json();
