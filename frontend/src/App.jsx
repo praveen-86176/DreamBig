@@ -269,9 +269,9 @@ const AnalysisDashboard = ({ data, imagePreview, onBack }) => {
             </div>
 
             <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border shadow-sm ${category === 'Healthy' ? 'border-green-500 text-green-500 bg-green-500/10' :
-                category === 'Balanced' ? 'border-blue-500 text-blue-500 bg-blue-500/10' :
-                  category === 'Moderate' ? 'border-yellow-500 text-yellow-500 bg-yellow-500/10' :
-                    'border-red-500 text-red-500 bg-red-500/10'
+              category === 'Balanced' ? 'border-blue-500 text-blue-500 bg-blue-500/10' :
+                category === 'Moderate' ? 'border-yellow-500 text-yellow-500 bg-yellow-500/10' :
+                  'border-red-500 text-red-500 bg-red-500/10'
               }`}>
               {category}
             </div>
@@ -416,7 +416,7 @@ function App() {
 
   const fetchHistory = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/analyze/history');
+      const res = await fetch('http://localhost:5001/api/analyze/history');
       if (!res.ok) throw new Error("Connection failed");
       const json = await res.json();
       if (json.success) setHistoryData(json.data);
@@ -435,7 +435,7 @@ function App() {
     formData.append('image', file);
 
     try {
-      const res = await fetch('http://localhost:5000/api/analyze', { method: 'POST', body: formData });
+      const res = await fetch('http://localhost:5001/api/analyze', { method: 'POST', body: formData });
       if (!res.ok) throw new Error("Server error");
 
       const result = await res.json();
@@ -482,7 +482,7 @@ function App() {
         isOpen={historyOpen}
         onClose={() => setHistoryOpen(false)}
         history={historyData}
-        onSelect={(meal) => { setData({ analysis: meal.analysis }); setImagePreview(null); setError(null); }}
+        onSelect={(meal) => { setData(meal); setImagePreview(null); setError(null); }}
       />
 
       <CameraModal
@@ -532,72 +532,124 @@ function App() {
             </div>
           </div>
         ) : !data ? (
-          <div className="w-full flex flex-col items-center">
-            {/* Hero Section */}
-            <div className="text-center max-w-3xl space-y-8 animate-fade-in py-6 sm:py-10 mb-8 sm:mb-12">
-              <div className="space-y-6 sm:space-y-8">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/10 text-brand-primary text-xs font-bold uppercase tracking-wider animate-slide-up">
-                  <CheckCircle2 className="w-3 h-3" /> AI-Powered Nutrition
+          <div className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
+            {/* Hero Section with Image */}
+            <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-5 gap-8 items-center mb-6 px-4">
+              {/* Left: Text Content - 3 cols */}
+              <div className="text-center lg:text-left space-y-6 animate-fade-in order-2 lg:order-1 lg:col-span-3">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-primary/30 bg-brand-primary/10 text-brand-primary text-xs font-bold uppercase tracking-wider animate-slide-up">
+                    <CheckCircle2 className="w-3 h-3" /> AI-Powered Nutrition
+                  </div>
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-[var(--text-main)] leading-tight animate-slide-up" style={{ animationDelay: '0.1s' }}>
+                    Know Your <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-blue-500">Food.</span>
+                  </h1>
+                  <p className="text-base sm:text-lg text-[var(--text-muted)] max-w-xl mx-auto lg:mx-0 leading-relaxed animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                    Instant nutritional analysis. Detailed macro breakdown.
+                    <br className="hidden sm:block" />Just snap a photo and let our AI do the rest.
+                  </p>
                 </div>
-                <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter text-[var(--text-main)] mb-2 leading-none animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                  Know Your <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-blue-500">Food.</span>
-                </h1>
-                <p className="text-lg sm:text-xl text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed animate-slide-up px-4" style={{ animationDelay: '0.2s' }}>
-                  Instant nutritional analysis. Detailed macro breakdown.
-                  <br className="hidden md:block" /> Just snap a photo and let our AI do the rest.
-                </p>
+
+                <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+                  <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileInput} />
+
+                  <button
+                    onClick={() => fileInputRef.current.click()}
+                    className="group w-full sm:w-48 h-14 n-card hover:border-brand-primary flex items-center justify-center gap-3 hover:bg-[var(--bg-card-hover)] transition-all shadow-lg hover:shadow-brand-primary/10"
+                  >
+                    <div className="w-7 h-7 bg-[var(--bg-page)] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                      <Upload className="w-4 h-4 text-brand-primary" />
+                    </div>
+                    <span className="font-bold text-sm text-[var(--text-main)]">Upload Image</span>
+                  </button>
+
+                  <button
+                    onClick={() => setCameraOpen(true)}
+                    className="group w-full sm:w-48 h-14 bg-brand-primary text-black rounded-3xl flex items-center justify-center gap-3 hover:bg-emerald-400 transition-all shadow-xl shadow-emerald-500/30 transform hover:scale-[1.02]"
+                  >
+                    <div className="w-7 h-7 bg-black/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Camera className="w-4 h-4 text-black" />
+                    </div>
+                    <span className="font-bold text-sm">Open Camera</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up px-6" style={{ animationDelay: '0.3s' }}>
-                <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileInput} />
-
-                <button
-                  onClick={() => fileInputRef.current.click()}
-                  className="group w-full sm:w-56 h-16 n-card hover:border-brand-primary flex items-center justify-center gap-3 hover:bg-[var(--bg-card-hover)] transition-all shadow-lg hover:shadow-brand-primary/10"
-                >
-                  <div className="w-8 h-8 bg-[var(--bg-page)] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
-                    <Upload className="w-4 h-4 text-brand-primary" />
-                  </div>
-                  <span className="font-bold text-base text-[var(--text-main)]">Upload Image</span>
-                </button>
-
-                <button
-                  onClick={() => setCameraOpen(true)}
-                  className="group w-full sm:w-56 h-16 bg-brand-primary text-black rounded-3xl flex items-center justify-center gap-3 hover:bg-emerald-400 transition-all shadow-xl shadow-emerald-500/30 transform hover:scale-[1.02]"
-                >
-                  <div className="w-8 h-8 bg-black/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Camera className="w-4 h-4 text-black" />
-                  </div>
-                  <span className="font-bold text-base">Open Camera</span>
-                </button>
+              {/* Right: Hero Image - 2 cols, SMALL */}
+              <div className="relative animate-slide-up order-1 lg:order-2 lg:col-span-2" style={{ animationDelay: '0.2s' }}>
+                <div className="relative rounded-2xl overflow-hidden shadow-xl border-2 border-[var(--border-light)] max-w-[280px] mx-auto">
+                  <img
+                    src="/hero-food.png"
+                    alt="Healthy food"
+                    className="w-full h-auto object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+                </div>
+                {/* Floating badges */}
+                <div className="absolute -top-2 -right-2 bg-brand-primary text-black px-3 py-1 rounded-full font-bold text-xs shadow-lg animate-bounce">
+                  🥗 Healthy
+                </div>
+                <div className="absolute -bottom-2 -left-2 bg-blue-500 text-white px-3 py-1 rounded-full font-bold text-xs shadow-lg animate-bounce" style={{ animationDelay: '0.5s' }}>
+                  🍛 Balanced
+                </div>
               </div>
             </div>
 
-            {/* Features Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-4xl px-4">
-              <StepCard
-                icon={Camera}
-                title="1. Snap"
-                desc="Take a photo of your meal or upload from your gallery."
-                delay={0.4}
-              />
-              <StepCard
-                icon={ScanLine}
-                title="2. Analyze"
-                desc="Our AI identifies ingredients and calculates nutritional values."
-                delay={0.5}
-              />
-              <StepCard
-                icon={CheckCircle2}
-                title="3. Track"
-                desc="Get instant macros, calories, and health insights."
-                delay={0.6}
-              />
+            {/* Awareness + Features - Two Rows */}
+            <div className="w-full max-w-6xl px-4 space-y-4">
+              {/* Awareness Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="n-card p-5 text-center hover:border-brand-primary transition-all">
+                  <div className="w-14 h-14 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-3xl">💪</span>
+                  </div>
+                  <h3 className="font-bold text-base text-[var(--text-main)] mb-2">Better Health</h3>
+                  <p className="text-sm text-[var(--text-muted)] leading-relaxed">Make informed choices and improve wellness</p>
+                </div>
+
+                <div className="n-card p-5 text-center hover:border-brand-primary transition-all">
+                  <div className="w-14 h-14 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-3xl">🎯</span>
+                  </div>
+                  <h3 className="font-bold text-base text-[var(--text-main)] mb-2">Reach Goals</h3>
+                  <p className="text-sm text-[var(--text-muted)] leading-relaxed">Track macros for fitness goals</p>
+                </div>
+
+                <div className="n-card p-5 text-center hover:border-brand-primary transition-all">
+                  <div className="w-14 h-14 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-3xl">🧠</span>
+                  </div>
+                  <h3 className="font-bold text-base text-[var(--text-main)] mb-2">Learn & Grow</h3>
+                  <p className="text-sm text-[var(--text-muted)] leading-relaxed">Develop healthier eating habits</p>
+                </div>
+              </div>
+
+              {/* Features Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <StepCard
+                  icon={Camera}
+                  title="1. Snap"
+                  desc="Take a photo of your meal or upload from your gallery."
+                  delay={0.4}
+                />
+                <StepCard
+                  icon={ScanLine}
+                  title="2. Analyze"
+                  desc="Our AI identifies ingredients and calculates nutritional values."
+                  delay={0.5}
+                />
+                <StepCard
+                  icon={CheckCircle2}
+                  title="3. Track"
+                  desc="Get instant macros, calories, and health insights."
+                  delay={0.6}
+                />
+              </div>
             </div>
           </div>
         ) : (
-          <AnalysisDashboard data={{ analysis: data }} imagePreview={imagePreview} onBack={handleBack} />
+          <AnalysisDashboard data={data} imagePreview={imagePreview} onBack={handleBack} />
         )}
 
       </main>

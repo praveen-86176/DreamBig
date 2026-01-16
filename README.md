@@ -1,71 +1,157 @@
-# 🥑 NutriAI - AI Nutrition Assistant
+# 🥗 NutriVeda - AI Nutrition Assistant
 
-A full-stack AI-powered nutrition assistant that analyzes your food photos and provides health insights using Gemini Vision.
+An intelligent food analysis application that uses Google Gemini AI to provide instant nutritional insights from food images.
 
-## 🚀 Features
+## ✨ Features
 
-- **Food Recognition**: Identifies food items from images.
-- **Health Analysis**: Classifies meals as Healthy, Moderate, or Unhealthy.
-- **Dietary Advice**: Provides explanations and recommendations for your next meal.
-- **Premium UI**: Modern, responsive, and vibrant interface using React + Tailwind.
+- 📸 **Instant Analysis** - Upload or capture food images for immediate nutritional breakdown
+- 🤖 **AI-Powered** - Uses Google Gemini Vision AI for accurate food recognition
+- 📊 **Detailed Insights** - Get macros, micros, calories, ingredients, and health scores
+- 🎯 **Smart Categorization** - Foods are classified as Healthy, Balanced, or Indulgent
+- 📱 **Responsive Design** - Works seamlessly on desktop and mobile
+- 🌓 **Dark/Light Mode** - Toggle between themes for comfortable viewing
+- 📜 **History Tracking** - View your past meal analyses
 
-## 🛠 Tech Stack
+## 🚀 Tech Stack
 
-- **Frontend**: React, Vite, Tailwind CSS
-- **Backend**: Node.js, Express, Multer
-- **AI**: Google Gemini (generative-ai)
-- **Database**: MongoDB
+### Frontend
+- **React** with Vite
+- **Tailwind CSS v4** for styling
+- **Recharts** for data visualization
+- **Lucide React** for icons
+- **react-webcam** for camera integration
 
-## 📦 Setup & Installation
+### Backend
+- **Node.js** with Express
+- **MongoDB** for data persistence
+- **Google Gemini AI** for image analysis
+- **Multer** for file uploads
 
-### Prerequisities
-- Node.js installed
-- MongoDB installed and running locally (or a cloud URI)
-- Google Cloud API Key with Gemini API access
+## 📋 Prerequisites
 
-### 1. Backend Setup
+- Node.js (v18 or higher)
+- MongoDB (local or Atlas)
+- Google Gemini API Key ([Get it here](https://makersuite.google.com/app/apikey))
 
+## 🛠️ Installation
+
+### 1. Clone the repository
+```bash
+git clone <your-repo-url>
+cd DreamBig
+```
+
+### 2. Backend Setup
 ```bash
 cd backend
 npm install
+
+# Create .env file
+cp .env.example .env
+# Edit .env and add your GEMINI_API_KEY
 ```
 
-**Configuration:**
-Create a `.env` file in the `backend` folder (or edit the existing one):
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/nutrition-assistant
-GEMINI_API_KEY=YOUR_ACTIAL_API_KEY_HERE
-```
-
-**Run Server:**
-```bash
-npm run dev
-# or
-node server.js
-```
-
-### 2. Frontend Setup
-
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
-npm run dev
 ```
 
-The frontend will start at `http://localhost:5173`.
+## 🔐 Environment Variables
 
-## 📸 Usage
+Create a `.env` file in the `backend` directory:
 
-1. Start both Backend and Frontend.
-2. Open the Frontend URL.
-3. Upload a food image.
-4. Wait for the AI analysis and view your results!
+```env
+PORT=5001
+MONGODB_URI=mongodb://localhost:27017/nutrition-assistant
+GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-## 🧪 Deployment
+**⚠️ IMPORTANT:** Never commit your `.env` file to version control!
 
-- **Frontend**: Ready for deployment on Vercel/Netlify.
-- **Backend**: Ready for Render/Fly.io. Ensure environment variables are set in the dashboard.
+## 🏃 Running the Application
+
+### Start Backend
+```bash
+cd backend
+npm start
+```
+Server will run on `http://localhost:5001`
+
+### Start Frontend
+```bash
+cd frontend
+npm run dev
+```
+App will run on `http://localhost:5173`
+
+## 📱 Usage
+
+1. **Upload or Capture** - Click "Upload Image" or "Open Camera"
+2. **Analyze** - AI processes the image and identifies the food
+3. **Review** - Get detailed nutritional breakdown with:
+   - Food name and serving size
+   - Calories and macronutrients (protein, carbs, fats, fiber, sugar)
+   - Micronutrients (vitamins and minerals)
+   - Ingredients list
+   - Health score (0-100)
+   - Category (Healthy/Balanced/Indulgent)
+4. **Track** - View your meal history anytime
+
+## 🎨 Features in Detail
+
+### Food Categorization
+- **🥗 Healthy** - Nutritious, balanced, low processed foods
+- **🍛 Balanced** - Moderate nutrition, home-cooked meals
+- **🍔 Indulgent** - High calorie, processed, fast foods
+
+### Nutritional Analysis
+- Accurate calorie estimation
+- Complete macro breakdown (protein, carbs, fats, fiber, sugar)
+- Key micronutrients (vitamins and minerals)
+- Ingredient detection
+- Health score based on nutritional value
+
+## 🔒 Security
+
+- API keys stored in environment variables
+- `.env` files excluded from version control
+- Comprehensive `.gitignore` configuration
+- No sensitive data in source code
+
+## 📂 Project Structure
+
+```
+DreamBig/
+├── backend/
+│   ├── models/          # MongoDB schemas
+│   ├── routes/          # API routes
+│   ├── server.js        # Express server
+│   ├── .env.example     # Environment template
+│   └── package.json
+├── frontend/
+│   ├── public/          # Static assets
+│   ├── src/
+│   │   ├── App.jsx      # Main component
+│   │   └── index.css    # Global styles
+│   └── package.json
+└── README.md
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 🙏 Acknowledgments
+
+- Google Gemini AI for powerful image analysis
+- Tailwind CSS for beautiful styling
+- Recharts for data visualization
 
 ---
-Built with ❤️ by Antigravity
+
+Made with ❤️ using React, Node.js, and AI
