@@ -3,7 +3,8 @@ import Webcam from 'react-webcam';
 import {
   Camera, Upload, History as HistoryIcon, Moon, Sun, Leaf,
   Flame, Dna, Wheat, Droplets, Share2, X, ChevronLeft,
-  ScanLine, CheckCircle2, AlertCircle, ChefHat
+  ScanLine, CheckCircle2, AlertCircle, ChefHat, AlertTriangle,
+  Tag, Sparkles, Scale
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
 
@@ -392,6 +393,85 @@ const AnalysisDashboard = ({ data, imagePreview, onBack }) => {
             </div>
 
           </div>
+
+          {/* Enhanced Features Row */}
+          {(data.analysis.healthWarnings?.length > 0 || data.analysis.dietaryTags?.length > 0 || data.analysis.benefits?.length > 0) && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-5">
+
+              {/* Health Warnings */}
+              {data.analysis.healthWarnings && data.analysis.healthWarnings.length > 0 && (
+                <div className="n-card p-4 border-l-4 border-red-500">
+                  <h3 className="text-sm font-bold text-[var(--text-main)] mb-3 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-red-500" /> Warnings
+                  </h3>
+                  <div className="space-y-2">
+                    {data.analysis.healthWarnings.map((warning, idx) => (
+                      <div key={idx} className="flex items-start gap-2 text-xs text-[var(--text-muted)]">
+                        <span className="text-red-500 mt-0.5">•</span>
+                        <span>{warning}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Dietary Tags */}
+              {data.analysis.dietaryTags && data.analysis.dietaryTags.length > 0 && (
+                <div className="n-card p-4 border-l-4 border-blue-500">
+                  <h3 className="text-sm font-bold text-[var(--text-main)] mb-3 flex items-center gap-2">
+                    <Tag className="w-4 h-4 text-blue-500" /> Dietary Info
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {data.analysis.dietaryTags.map((tag, idx) => (
+                      <span key={idx} className="px-2 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[10px] font-bold rounded-full border border-blue-500/20">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Benefits */}
+              {data.analysis.benefits && data.analysis.benefits.length > 0 && (
+                <div className="n-card p-4 border-l-4 border-green-500">
+                  <h3 className="text-sm font-bold text-[var(--text-main)] mb-3 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-green-500" /> Benefits
+                  </h3>
+                  <div className="space-y-2">
+                    {data.analysis.benefits.map((benefit, idx) => (
+                      <div key={idx} className="flex items-start gap-2 text-xs text-[var(--text-muted)]">
+                        <span className="text-green-500 mt-0.5">✓</span>
+                        <span>{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Cooking Method & Portion Advice */}
+          {(data.analysis.cookingMethod || data.analysis.portionAdvice) && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5">
+              {data.analysis.cookingMethod && (
+                <div className="n-card p-4">
+                  <h3 className="text-sm font-bold text-[var(--text-main)] mb-2 flex items-center gap-2">
+                    <Flame className="w-4 h-4 text-orange-500" /> Cooking Method
+                  </h3>
+                  <p className="text-base font-bold text-brand-primary">{data.analysis.cookingMethod}</p>
+                </div>
+              )}
+
+              {data.analysis.portionAdvice && (
+                <div className="n-card p-4">
+                  <h3 className="text-sm font-bold text-[var(--text-main)] mb-2 flex items-center gap-2">
+                    <Scale className="w-4 h-4 text-purple-500" /> Portion Size
+                  </h3>
+                  <p className="text-xs text-[var(--text-muted)]">{data.analysis.portionAdvice}</p>
+                </div>
+              )}
+            </div>
+          )}
 
         </div>
       </div>

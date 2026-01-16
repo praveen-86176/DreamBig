@@ -43,48 +43,68 @@ async function analyzeFood(imageBuffer, mimeType) {
         }
     };
 
-    const prompt = `You are an expert nutritionist and food analyzer. Analyze this food image carefully and provide detailed information.
+    const prompt = `You are an expert AI nutritionist with deep knowledge of global cuisines, cooking methods, and nutritional science.
 
-IMPORTANT INSTRUCTIONS:
-1. Identify the EXACT name of the food/dish (e.g., "Chicken Biryani", "Margherita Pizza", "Caesar Salad")
-2. Categorize it accurately:
-   - "Healthy" = Nutritious, balanced, low processed (salads, grilled proteins, fruits, vegetables)
-   - "Balanced" = Moderate nutrition, home-cooked meals, reasonable portions
-   - "Indulgent" = High calorie, processed, fast food, desserts, fried items
-3. Provide accurate nutritional estimates based on the visible portion
-4. List all visible ingredients
+ANALYSIS STEPS:
+1. IDENTIFY: Recognize the exact dish name, cuisine type, and cooking method
+2. PORTION: Estimate the serving size based on visible cues (plate size, utensils, portions)
+3. INGREDIENTS: List all visible ingredients and detect hidden ones based on dish type
+4. NUTRITION: Calculate accurate macros and micros based on ingredients and cooking method
+5. CATEGORIZE: Classify health level and provide actionable insights
+6. WARNINGS: Identify potential allergens, high sodium, added sugars, or health concerns
 
-Return ONLY valid JSON (no markdown, no code blocks):
+CATEGORIZATION RULES:
+- "Healthy" (Score 75-100): Whole foods, lean proteins, vegetables, fruits, minimal processing, balanced macros
+- "Balanced" (Score 50-74): Home-cooked, moderate portions, mix of food groups, some processed ingredients
+- "Indulgent" (Score 0-49): High calorie, fried, processed, fast food, high sugar/sodium, poor nutrient density
+
+ACCURACY REQUIREMENTS:
+- Adjust calories based on visible portion size and cooking method
+- Account for cooking oils, sauces, and hidden ingredients
+- Consider regional variations of dishes
+- Provide realistic micronutrient estimates
+- Include dietary tags (vegan, vegetarian, gluten-free, dairy-free, keto-friendly, etc.)
+
+Return ONLY valid JSON (no markdown, no explanations):
 {
-  "foodName": "Exact dish name (e.g., Chicken Tikka Masala, Double Cheeseburger)",
-  "servingSize": "Estimated portion (e.g., 1 bowl (300g), 2 pieces, 1 plate)",
-  "calories": 350,
+  "foodName": "Exact dish name with cuisine (e.g., 'Chicken Tikka Masala (Indian)', 'California Roll (Japanese)')",
+  "servingSize": "Precise portion (e.g., '1 medium bowl (350g)', '2 slices (180g)', '1 plate (400g)')",
+  "calories": 420,
   "macros": {
-    "protein": 25,
-    "carbs": 35,
-    "fat": 12,
-    "fiber": 6,
-    "sugar": 4
+    "protein": 28,
+    "carbs": 45,
+    "fat": 15,
+    "fiber": 8,
+    "sugar": 6
   },
   "micros": {
-    "Iron": "15%",
-    "Vitamin C": "20mg",
-    "Calcium": "12%",
-    "Vitamin A": "8%"
+    "Iron": "18%",
+    "Vitamin C": "35mg",
+    "Calcium": "15%",
+    "Vitamin A": "12%",
+    "Potassium": "450mg",
+    "Sodium": "680mg"
   },
-  "ingredients": ["Ingredient1", "Ingredient2", "Ingredient3"],
+  "ingredients": ["Primary ingredient 1", "Primary ingredient 2", "Sauce/seasoning", "Garnish"],
+  "cookingMethod": "Grilled|Fried|Steamed|Baked|Raw|Boiled|Sautéed",
   "category": "Healthy|Balanced|Indulgent",
-  "score": 75,
+  "score": 82,
   "emoji": "🥗",
-  "shortDescription": "Brief nutritional summary highlighting key benefits or concerns"
+  "shortDescription": "One-sentence nutritional summary with key benefit or concern",
+  "healthWarnings": ["High in sodium", "Contains gluten", "Fried in oil"] or [],
+  "dietaryTags": ["Vegetarian", "High-protein", "Low-carb"] or [],
+  "benefits": ["Rich in protein", "Good source of fiber", "Contains antioxidants"],
+  "portionAdvice": "Appropriate|Large|Small - brief comment on portion size"
 }
 
-Examples:
-- Pizza → "Indulgent", emoji: "🍕"
-- Salad → "Healthy", emoji: "🥗"
-- Dal Rice → "Balanced", emoji: "🍛"
-- Burger → "Indulgent", emoji: "🍔"
-- Grilled Chicken → "Healthy", emoji: "🍗"`;
+EXAMPLES:
+1. Grilled Chicken Salad → "Healthy", score: 88, warnings: [], tags: ["High-protein", "Low-carb", "Gluten-free"]
+2. Pepperoni Pizza → "Indulgent", score: 35, warnings: ["High in sodium", "High in saturated fat"], tags: []
+3. Dal Tadka with Rice → "Balanced", score: 68, warnings: [], tags: ["Vegetarian", "High-fiber", "Vegan"]
+4. Double Cheeseburger → "Indulgent", score: 28, warnings: ["High in saturated fat", "Processed meat"], tags: []
+5. Quinoa Buddha Bowl → "Healthy", score: 92, warnings: [], tags: ["Vegan", "High-fiber", "Gluten-free"]
+
+Be precise, realistic, and helpful. Focus on actionable nutritional insights.`;
 
     const result = await model.generateContent([prompt, imagePart]);
     const text = result.response.text()
