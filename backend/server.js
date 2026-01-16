@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 
@@ -34,7 +36,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // ===== Serve uploaded images =====
-const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ===== Multer =====
@@ -165,8 +166,6 @@ app.post('/api/analyze', upload.single('image'), async (req, res) => {
         console.log(`⭐ Score: ${analysis.score}/100`);
 
         // Save image to uploads folder
-        const fs = require('fs');
-        const path = require('path');
         const uploadsDir = path.join(__dirname, 'uploads');
 
         // Create uploads directory if it doesn't exist

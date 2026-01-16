@@ -1,43 +1,56 @@
 # 🥗 NutriVeda - AI Nutrition Assistant
 
-An intelligent food analysis application that uses Google Gemini AI to provide instant nutritional insights from food images.
+[![Backend](https://img.shields.io/badge/Backend-Live-success)](https://dreambig.onrender.com)
+[![Frontend](https://img.shields.io/badge/Frontend-Vercel-blue)](https://dream-big-4hri.vercel.app)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+
+> AI-powered food analysis with instant nutritional insights using Google Gemini Vision AI
 
 ## ✨ Features
 
-- 📸 **Instant Analysis** - Upload or capture food images for immediate nutritional breakdown
-- 🤖 **AI-Powered** - Uses Google Gemini Vision AI for accurate food recognition
-- 📊 **Detailed Insights** - Get macros, micros, calories, ingredients, and health scores
-- 🎯 **Smart Categorization** - Foods are classified as Healthy, Balanced, or Indulgent
-- 📱 **Responsive Design** - Works seamlessly on desktop and mobile
-- 🌓 **Dark/Light Mode** - Toggle between themes for comfortable viewing
-- 📜 **History Tracking** - View your past meal analyses
+- 📸 **Instant Analysis** - Upload or capture food images
+- 🤖 **AI-Powered** - Google Gemini Vision for accurate recognition
+- 📊 **Detailed Insights** - Macros, micros, calories, ingredients
+- 🏷️ **Smart Categorization** - Healthy, Balanced, or Indulgent
+- ⚠️ **Health Warnings** - Allergens, sodium, processed foods
+- 🎯 **Dietary Tags** - Vegan, High-protein, Gluten-free, etc.
+- 🍳 **Cooking Method** - Detection and display
+- 📱 **Responsive** - Works on all devices
+- 🌓 **Dark Mode** - Eye-friendly interface
+- 📜 **History** - Track your meals
 
-## 🚀 Tech Stack
+## 🚀 Live Demo
+
+- **Frontend**: https://dream-big-4hri.vercel.app
+- **Backend API**: https://dreambig.onrender.com
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- **React** with Vite
-- **Tailwind CSS v4** for styling
-- **Recharts** for data visualization
-- **Lucide React** for icons
-- **react-webcam** for camera integration
+- React 18 with Vite
+- Tailwind CSS v4
+- Recharts for visualization
+- Lucide React icons
+- react-webcam
 
 ### Backend
-- **Node.js** with Express
-- **MongoDB** for data persistence
-- **Google Gemini AI** for image analysis
-- **Multer** for file uploads
+- Node.js with Express
+- Google Gemini AI API
+- Multer for file uploads
+- MongoDB (optional)
+- CORS configured
 
 ## 📋 Prerequisites
 
-- Node.js (v18 or higher)
-- MongoDB (local or Atlas)
+- Node.js >= 18.0.0
 - Google Gemini API Key ([Get it here](https://makersuite.google.com/app/apikey))
+- npm or yarn
 
-## 🛠️ Installation
+## 🏃 Quick Start
 
-### 1. Clone the repository
+### 1. Clone Repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/praveen-86176/DreamBig.git
 cd DreamBig
 ```
 
@@ -45,79 +58,127 @@ cd DreamBig
 ```bash
 cd backend
 npm install
+cp .env.example .env
+# Edit .env and add your GEMINI_API_KEY
+npm start
 ```
+
+Backend runs on: `http://localhost:5001`
 
 ### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
-```
-
-## 🏃 Running the Application
-
-### Start Backend
-```bash
-cd backend
-npm start
-```
-
-### Start Frontend
-```bash
-cd frontend
 npm run dev
 ```
 
-## 📱 Usage
+Frontend runs on: `http://localhost:5173`
 
-1. **Upload or Capture** - Click "Upload Image" or "Open Camera"
-2. **Analyze** - AI processes the image and identifies the food
-3. **Review** - Get detailed nutritional breakdown with:
-   - Food name and serving size
-   - Calories and macronutrients (protein, carbs, fats, fiber, sugar)
-   - Micronutrients (vitamins and minerals)
-   - Ingredients list
-   - Health score (0-100)
-   - Category (Healthy/Balanced/Indulgent)
-4. **Track** - View your meal history anytime
+## 🔐 Environment Variables
 
-## 🎨 Features in Detail
+### Backend (.env)
+```env
+PORT=5001
+GEMINI_API_KEY=your_api_key_here
+MONGODB_URI=mongodb://localhost:27017/nutrition-assistant
+```
 
-### Food Categorization
-- **🥗 Healthy** - Nutritious, balanced, low processed foods
-- **🍛 Balanced** - Moderate nutrition, home-cooked meals
-- **🍔 Indulgent** - High calorie, processed, fast foods
+### Frontend (.env.development)
+```env
+VITE_API_URL=http://localhost:5001
+```
 
-### Nutritional Analysis
-- Accurate calorie estimation
-- Complete macro breakdown (protein, carbs, fats, fiber, sugar)
-- Key micronutrients (vitamins and minerals)
-- Ingredient detection
-- Health score based on nutritional value
+### Frontend (.env.production)
+```env
+VITE_API_URL=https://dreambig.onrender.com
+```
 
-## 🔒 Security
+## 📦 Deployment
 
-- API keys stored in environment variables
-- `.env` files excluded from version control
-- Comprehensive `.gitignore` configuration
-- No sensitive data in source code
+### Backend (Render)
+1. Push code to GitHub
+2. Create Web Service on Render
+3. Connect repository
+4. Add environment variables
+5. Deploy
 
-## 📂 Project Structure
+See `deploy-check.sh` for detailed steps.
+
+### Frontend (Vercel)
+1. Import project from GitHub
+2. Set root directory: `frontend`
+3. Set output directory: `dist`
+4. Add environment variable: `VITE_API_URL`
+5. Deploy
+
+## 🎯 API Endpoints
+
+```
+GET  /                      - API information
+GET  /api/health           - Health check
+POST /api/analyze          - Analyze food image
+GET  /api/analyze/history  - Get meal history
+```
+
+## 🧪 Testing
+
+```bash
+# Run security check
+./security-check.sh
+
+# Run deployment check
+./deploy-check.sh
+```
+
+## 📁 Project Structure
 
 ```
 DreamBig/
 ├── backend/
-│   ├── models/          # MongoDB schemas
-│   ├── routes/          # API routes
-│   ├── server.js        # Express server
-│   ├── .env.example     # Environment template
+│   ├── server.js          # Express server
+│   ├── .env.example       # Environment template
 │   └── package.json
 ├── frontend/
-│   ├── public/          # Static assets
 │   ├── src/
-│   │   ├── App.jsx      # Main component
-│   │   └── index.css    # Global styles
+│   │   ├── App.jsx        # Main component
+│   │   └── index.css      # Tailwind styles
+│   ├── public/            # Static assets
 │   └── package.json
+├── package.json           # Root package (Render)
+├── vercel.json           # Vercel config
+├── render.yaml           # Render config
 └── README.md
 ```
 
-Made with ❤️ using React, Node.js, and AI by **Praveen Kumar**
+## 🔒 Security
+
+- ✅ API keys in environment variables
+- ✅ `.env` files ignored by git
+- ✅ CORS configured for production
+- ✅ File size limits (10MB)
+- ✅ Image type validation
+- ✅ Security check script
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+MIT License - feel free to use this project for learning or production.
+
+## 🙏 Acknowledgments
+
+- Google Gemini AI for powerful image analysis
+- Tailwind CSS for beautiful styling
+- Recharts for data visualization
+- Vercel & Render for hosting
+
+## 📧 Contact
+
+**Praveen Kumar**
+- GitHub: [@praveen-86176](https://github.com/praveen-86176)
+
+---
+
+Made with ❤️ using React, Node.js, and AI
