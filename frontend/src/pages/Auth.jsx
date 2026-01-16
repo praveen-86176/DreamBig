@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Leaf, Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+import { Leaf, Mail, Lock, User, ArrowRight, Loader2, Sparkles, ChevronLeft } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
@@ -165,14 +165,39 @@ const Auth = ({ onLogin }) => {
                         </button>
                     </form>
 
+                    {/* Smooth Entry Helper */}
+                    <div className="mt-6">
+                        <button
+                            onClick={() => {
+                                setEmail('test@example.com');
+                                setPassword('password123');
+                                if (!isLogin) setName('Guest User');
+                                // Give it a tiny delay so the UI registers the value change before submission
+                                setTimeout(() => {
+                                    const form = document.querySelector('form');
+                                    form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                                }, 100);
+                            }}
+                            className="w-full py-3 rounded-xl border border-dashed border-[var(--border-light)] text-[var(--text-muted)] text-xs font-bold uppercase tracking-widest hover:border-brand-primary/50 hover:text-brand-primary transition-all flex items-center justify-center gap-2 group"
+                        >
+                            <Sparkles className="w-4 h-4 group-hover:animate-pulse" />
+                            Guest Access (One-click)
+                        </button>
+                    </div>
                 </div>
 
-                <p className="text-center mt-8 text-sm text-[var(--text-muted)]">
-                    By continuing, you agree to our{' '}
-                    <a href="#" className="font-bold text-brand-primary hover:underline">Terms</a>
-                    {' '}and{' '}
-                    <a href="#" className="font-bold text-brand-primary hover:underline">Privacy Policy</a>.
-                </p>
+                <div className="flex flex-col items-center gap-4 mt-8">
+                    <p className="text-sm text-[var(--text-muted)]">
+                        By continuing, you agree to our{' '}
+                        <a href="#" className="font-bold text-brand-primary hover:underline">Terms</a>
+                        {' '}and{' '}
+                        <a href="#" className="font-bold text-brand-primary hover:underline">Privacy Policy</a>.
+                    </p>
+                    <a href="/" className="text-xs font-bold text-[var(--text-muted)] hover:text-brand-primary transition-colors flex items-center gap-1 group">
+                        <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+                        Back to Home
+                    </a>
+                </div>
             </div>
         </div>
     );

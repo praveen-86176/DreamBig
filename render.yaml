@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: nutriveda-backend
+    name: dreambig
     runtime: node
     buildCommand: npm install
     startCommand: npm start

@@ -312,7 +312,11 @@ app.get('/', (req, res) => {
         endpoints: {
             health: '/api/health',
             analyze: 'POST /api/analyze',
-            history: 'GET /api/analyze/history'
+            history: 'GET /api/analyze/history',
+            auth: {
+                signup: 'POST /api/auth/signup',
+                login: 'POST /api/auth/login'
+            }
         }
     });
 });
