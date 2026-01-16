@@ -34,9 +34,20 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 // ===== MongoDB Connection =====
-mongoose.connect(process.env.MONGODB_URI)
+if (!process.env.MONGODB_URI) {
+    console.warn('⚠️  MONGODB_URI is missing in environment variables. Auth will not work.');
+}
+
+const dbOptions = {
+    serverSelectionTimeoutMS: 5000, // Keep it short for faster failure reporting
+};
+
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/nutriveda', dbOptions)
     .then(() => console.log('🍃 MongoDB Connected'))
-    .catch(err => console.error('❌ MongoDB Connection Error:', err));
+    .catch(err => console.error('❌ MongoDB Connection Error:', err.message));
+
+// Helper to check DB health
+const checkDB = () => mongoose.connection.readyState === 1;
 
 // ===== User Schema =====
 const userSchema = new mongoose.Schema({
@@ -71,7 +82,14 @@ app.use(express.json());
 // ===== Auth Routes =====
 app.post('/api/auth/signup', async (req, res) => {
     try {
+        if (!checkDB()) {
+            return res.status(503).json({ success: false, message: 'Database connecting... Please try again in a moment.' });
+        }
+
         const { name, email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: 'Email and password are required' });
+        }
 
         // Check if user exists
         const existingUser = await User.findOne({ email });
@@ -89,13 +107,17 @@ app.post('/api/auth/signup', async (req, res) => {
             user: { name: newUser.name, email: newUser.email }
         });
     } catch (error) {
-        console.error('Signup Error:', error);
-        res.status(500).json({ success: false, message: 'Server error during signup' });
+        console.error('Signup Error Detailed:', error);
+        res.status(500).json({ success: false, message: `Database error: ${error.message}` });
     }
 });
 
 app.post('/api/auth/login', async (req, res) => {
     try {
+        if (!checkDB()) {
+            return res.status(503).json({ success: false, message: 'Database connecting... Please try again in a moment.' });
+        }
+
         const { email, password } = req.body;
 
         // Find user
@@ -110,8 +132,8 @@ app.post('/api/auth/login', async (req, res) => {
             user: { name: user.name, email: user.email }
         });
     } catch (error) {
-        console.error('Login Error:', error);
-        res.status(500).json({ success: false, message: 'Server error during login' });
+        console.error('Login Error Detailed:', error);
+        res.status(500).json({ success: false, message: `Database error: ${error.message}` });
     }
 });
 
