@@ -115,10 +115,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
-// ===== Serve uploaded images =====
 
-
-// ===== Serve uploaded images =====
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ===== Multer =====
