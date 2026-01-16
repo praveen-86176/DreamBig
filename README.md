@@ -1,7 +1,5 @@
 # 🥗 NutriVeda - AI Nutrition Assistant
-
-An intelligent food analysis application that uses Google Gemini AI to provide instant nutritional insights from food images.
-
+NutriLens is an AI-powered web app that instantly analyzes food images to deliver accurate nutritional insights—including calories, protein, carbs, and fats—helping users make smarter dietary choices effortlessly.
 ## ✨ Features
 
 - 📸 **Instant Analysis** - Upload or capture food images for immediate nutritional breakdown
@@ -45,10 +43,6 @@ cd DreamBig
 ```bash
 cd backend
 npm install
-
-# Create .env file
-cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
 ```
 
 ### 3. Frontend Setup
@@ -57,18 +51,6 @@ cd frontend
 npm install
 ```
 
-## 🔐 Environment Variables
-
-Create a `.env` file in the `backend` directory:
-
-```env
-PORT=5001
-MONGODB_URI=mongodb://localhost:27017/nutrition-assistant
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-**⚠️ IMPORTANT:** Never commit your `.env` file to version control!
-
 ## 🏃 Running the Application
 
 ### Start Backend
@@ -76,14 +58,12 @@ GEMINI_API_KEY=your_gemini_api_key_here
 cd backend
 npm start
 ```
-Server will run on `http://localhost:5001`
 
 ### Start Frontend
 ```bash
 cd frontend
 npm run dev
 ```
-App will run on `http://localhost:5173`
 
 ## 📱 Usage
 
@@ -112,12 +92,6 @@ App will run on `http://localhost:5173`
 - Ingredient detection
 - Health score based on nutritional value
 
-## 🔒 Security
-
-- API keys stored in environment variables
-- `.env` files excluded from version control
-- Comprehensive `.gitignore` configuration
-- No sensitive data in source code
 
 ## 📂 Project Structure
 
@@ -135,20 +109,6 @@ DreamBig/
 │   └── package.json
 └── README.md
 ```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
-## 🙏 Acknowledgments
-
-- Google Gemini AI for powerful image analysis
-- Tailwind CSS for beautiful styling
-- Recharts for data visualization
 
 ---
 
