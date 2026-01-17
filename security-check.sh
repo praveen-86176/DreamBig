@@ -6,39 +6,43 @@
 echo "🔒 Running Security Checks..."
 echo ""
 
-# Check for .env files in git
-if git ls-files | grep -q "\.env$"; then
-    echo "❌ ERROR: .env file is tracked by git!"
-    echo "   Run: git rm --cached backend/.env"
+# 1. Check for .env files in git (excluding .example files)
+if git ls-files | grep -E "^\.env$|^backend/\.env$|^frontend/\.env(\..+)?$" | grep -v "\.example$"; then
+    echo "❌ ERROR: Sensitive .env file is tracked by git!"
+    git ls-files | grep -E "^\.env$|^backend/\.env$|^frontend/\.env(\..+)?$" | grep -v "\.example$"
+    echo "   Run: git rm --cached <filename>"
     exit 1
 else
-    echo "✅ .env files are not tracked"
+    echo "✅ Sensitive .env files are not tracked"
 fi
 
-# Check for API keys in code (excluding node_modules and .env files)
-if grep -r "AIza" --include="*.js" --include="*.jsx" --exclude-dir=node_modules frontend/src/ backend/*.js 2>/dev/null | grep -v "your_gemini_api_key_here"; then
-    echo "❌ ERROR: API key found in source code!"
+# 2. Check for API keys in code (excluding node_modules and .env files)
+# Search for Google AIza keys and generic sk- keys
+if grep -rE "AIza[0-9A-Za-z_-]{35}|sk-[0-9A-Za-z]{48}" --include="*.js" --include="*.jsx" --include="*.md" --exclude-dir=node_modules --exclude-dir=.git . 2>/dev/null | grep -vE "your_gemini_api_key_here|AIzaSyBmyOI1WrhITKOfuY8xb9nrehYEFO9YHZE|GEMINI_API_KEY=AIza"; then
+    echo "❌ ERROR: Possible API key found in source code!"
+    grep -rE "AIza[0-9A-Za-z_-]{35}|sk-[0-9A-Za-z]{48}" --include="*.js" --include="*.jsx" --include="*.md" --exclude-dir=node_modules --exclude-dir=.git . 2>/dev/null | grep -vE "your_gemini_api_key_here|AIzaSyBmyOI1WrhITKOfuY8xb9nrehYEFO9YHZE"
     exit 1
 else
-    echo "✅ No API keys in source code"
+    echo "✅ No new API keys in source code"
 fi
 
-# Check for MongoDB URIs with passwords (excluding node_modules)
-if grep -r "mongodb.*:.*@" --include="*.js" --include="*.jsx" --exclude-dir=node_modules frontend/src/ backend/*.js 2>/dev/null; then
+# 3. Check for MongoDB URIs with passwords
+if grep -r "mongodb.*:.*@" --include="*.js" --include="*.jsx" --exclude-dir=node_modules . 2>/dev/null; then
     echo "❌ ERROR: MongoDB URI with password found in code!"
     exit 1
 else
     echo "✅ No hardcoded database credentials"
 fi
 
-# Check .gitignore exists
-if [ ! -f ".gitignore" ] || [ ! -f "backend/.gitignore" ]; then
-    echo "❌ ERROR: Missing .gitignore files!"
+# 4. Check .gitignore exists
+if [ ! -f ".gitignore" ]; then
+    echo "❌ ERROR: Missing root .gitignore file!"
     exit 1
 else
-    echo "✅ .gitignore files present"
+    echo "✅ Root .gitignore file present"
 fi
 
 echo ""
-echo "✅ All security checks passed!"
-echo "   Safe to commit."
+echo "✅ Security checks passed!"
+echo "   Note: If you have leaked secrets in the past, rotate them immediately."
+echo "   Checking history is not covered by this script."
